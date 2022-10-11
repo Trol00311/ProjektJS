@@ -27,7 +27,8 @@ const prepareDOMEvents = () => {
 	addBtn.addEventListener("click", addnewTask)
 	ulList.addEventListener("click", checkClick)
 	popupCloseBtn.addEventListener("click", closePopup)
-    popupAddBtn.addEventListener("click", changeToDo)
+	popupAddBtn.addEventListener("click", changeToDo)
+	todoInput.addEventListener("keyup", enterKeyCheck)
 }
 
 const addnewTask = () => {
@@ -71,7 +72,7 @@ const checkClick = e => {
 	} else if (e.target.matches(".edit")) {
 		editToDo(e)
 	} else if (e.target.matches(".delete")) {
-		console.log("delete")
+		deleteTodo(e)
 	}
 }
 
@@ -83,16 +84,33 @@ const editToDo = e => {
 
 const closePopup = () => {
 	popup.style.display = "none"
-    popupInfo.textContent =''
+	popupInfo.textContent = ""
 }
 
 const changeToDo = () => {
-    if(popupInput.value !==""){
-        todoEdit.firstChild.textContent= popupInput.value 
-        popup.style.display = "none"
-        popupInfo.textContent =''
-    }else{
-        popupInfo.textContent ='Musisz podać jakieś zadanie'
-    }
+	if (popupInput.value !== "") {
+		todoEdit.firstChild.textContent = popupInput.value
+		popup.style.display = "none"
+		popupInfo.textContent = ""
+	} else {
+		popupInfo.textContent = "Musisz podać jakieś zadanie"
+	}
 }
+
+const deleteTodo = e => {
+	e.target.closest("li").remove()
+
+	const allTodos = ulList.querySelectorAll("li")
+
+	if (allTodos.length === 0) {
+		errorInfo.textContent = "Brak zadań na liście."
+	}
+}
+
+const enterKeyCheck = e => {
+	if (e.key === "Enter") {
+		addnewTask()
+	}
+}
+
 document.addEventListener("DOMContentLoaded", main)
